@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Our Toronto 🍁</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --cream:#faf7f2;--warm-white:#fffdf9;--blush:#f2d4c8;--rose:#d4816a;
+      --deep-rose:#b05a44;--sage:#8aab8a;--deep-sage:#5c7a5c;--navy:#1e2d40;
+      --gold:#c9a84c;--text:#2c2c2c;--text-light:#6b6b6b;
+      --card-shadow:0 4px 24px rgba(30,45,64,0.09);--radius:18px;
+    }
+    html{scroll-behavior:smooth}
+    body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--text);min-height:100vh}
+
+    /* HERO */
+    .hero{position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 24px;overflow:hidden;background:linear-gradient(160deg,#1e2d40 0%,#2d4a6b 45%,#4a6741 100%)}
+    .hero-bg-circles{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+    .hero-bg-circles span{position:absolute;border-radius:50%;opacity:.12;animation:float 8s ease-in-out infinite}
+    .hero-bg-circles span:nth-child(1){width:500px;height:500px;background:var(--blush);top:-120px;left:-100px}
+    .hero-bg-circles span:nth-child(2){width:350px;height:350px;background:var(--gold);bottom:-80px;right:-60px;animation-delay:3s}
+    .hero-bg-circles span:nth-child(3){width:200px;height:200px;background:var(--sage);top:40%;left:60%;animation-delay:1.5s}
+    @keyframes float{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-30px) scale(1.04)}}
+    .hero-badge{display:inline-block;background:rgba(255,255,255,.15);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.25);color:#fff;font-size:.78rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;padding:8px 20px;border-radius:100px;margin-bottom:28px}
+    .hero h1{font-family:'Playfair Display',serif;font-size:clamp(3rem,8vw,6.5rem);color:#fff;line-height:1.05;margin-bottom:20px}
+    .hero h1 em{font-style:italic;color:#f2d4c8}
+    .hero p{font-size:clamp(1rem,2.5vw,1.25rem);color:rgba(255,255,255,.75);max-width:520px;line-height:1.7;margin-bottom:40px}
+    .hero-cta{display:inline-flex;align-items:center;gap:10px;background:var(--blush);color:var(--navy);font-weight:600;font-size:.95rem;padding:16px 32px;border-radius:100px;text-decoration:none;transition:transform .2s,box-shadow .2s;box-shadow:0 8px 32px rgba(242,212,200,.35)}
+    .hero-cta:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(242,212,200,.45)}
+    .scroll-hint{position:absolute;bottom:32px;display:flex;flex-direction:column;align-items:center;gap:6px;color:rgba(255,255,255,.4);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase}
+    .scroll-hint-line{width:1px;height:40px;background:linear-gradient(to bottom,transparent,rgba(255,255,255,.3));animation:scrollPulse 2s ease-in-out infinite}
+    @keyframes scrollPulse{0%,100%{opacity:.4}50%{opacity:1}}
+
+    /* PICKS BAR */
+    #picks-bar{background:var(--navy);color:#fff;padding:0 24px;overflow:hidden;max-height:0;transition:max-height .5s ease,padding .3s ease}
+    #picks-bar.visible{max-height:160px;padding:18px 24px}
+    .picks-bar-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+    .picks-bar-inner h3{font-size:.8rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);white-space:nowrap}
+    #picks-summary{display:flex;gap:8px;flex-wrap:wrap;align-items:center;flex:1}
+    .pick-chip{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:100px;padding:4px 12px;font-size:.76rem;color:rgba(255,255,255,.85);display:flex;align-items:center;gap:5px}
+    .pick-chip .check{color:var(--sage)}
+    #taste-insight{font-size:.8rem;color:rgba(255,255,255,.55);font-style:italic;margin-left:auto;white-space:nowrap}
+
+    /* FILTERS */
+    .filter-section{position:sticky;top:0;z-index:100;background:var(--warm-white);border-bottom:1px solid rgba(30,45,64,.08);padding:0 24px}
+    .filter-inner{max-width:1200px;margin:0 auto;padding:12px 0;display:flex;flex-direction:column;gap:10px}
+    .filter-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+    .filter-row-label{font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text-light);white-space:nowrap;min-width:68px}
+    .filter-btn{flex-shrink:0;padding:6px 14px;border-radius:100px;border:1.5px solid rgba(30,45,64,.15);background:transparent;color:var(--text-light);font-size:.8rem;font-weight:500;cursor:pointer;transition:all .18s;white-space:nowrap;font-family:'Inter',sans-serif}
+    .filter-btn:hover{border-color:var(--rose);color:var(--rose)}
+    .filter-btn.on-cat{background:var(--navy);border-color:var(--navy);color:#fff}
+    .filter-btn.on-for{background:var(--deep-rose);border-color:var(--deep-rose);color:#fff}
+    .filter-btn.on-visited{background:var(--deep-sage);border-color:var(--deep-sage);color:#fff}
+    .filter-btn.on-recs{background:#a07830;border-color:#a07830;color:#fff}
+    .filter-sep{width:1px;height:20px;background:rgba(30,45,64,.12);flex-shrink:0}
+    .filter-clear{margin-left:auto;font-size:.76rem;color:var(--rose);background:none;border:none;cursor:pointer;font-family:'Inter',sans-serif;padding:4px 8px;border-radius:6px;transition:background .15s;display:none}
+    .filter-clear:hover{background:rgba(212,129,106,.1)}
+    .filter-clear.show{display:block}
+
+    /* RESULTS BAR */
+    #results-bar{max-width:1200px;margin:0 auto;padding:14px 24px 0;display:flex;align-items:center;justify-content:space-between}
+    #results-count{font-size:.83rem;color:var(--text-light)}
+    #results-count strong{color:var(--navy)}
+
+    /* MAIN GRID */
+    .main-section{max-width:1200px;margin:0 auto;padding:18px 24px 80px}
+    .cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:22px}
+    .empty-state{grid-column:1/-1;text-align:center;padding:80px 24px;display:none}
+    .empty-state.show{display:block}
+    .empty-state .ee{font-size:3rem;display:block;margin-bottom:14px}
+    .empty-state h3{font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--navy);margin-bottom:8px}
+    .empty-state p{font-size:.9rem;color:var(--text-light)}
+
+    /* CARDS */
+    .card{background:var(--warm-white);border-radius:var(--radius);overflow:hidden;box-shadow:var(--card-shadow);transition:transform .25s,box-shadow .25s,opacity .3s;display:flex;flex-direction:column;position:relative}
+    .card:hover{transform:translateY(-5px);box-shadow:0 12px 40px rgba(30,45,64,.14)}
+    .card[data-hidden="true"]{display:none}
+    .card.visited{opacity:.72}
+    .card.visited:hover{opacity:1;transform:translateY(-4px)}
+    .card.visited .card-image-inner{filter:grayscale(25%)}
+
+    .visited-overlay{display:none;position:absolute;top:0;left:0;right:0;background:linear-gradient(135deg,rgba(92,122,92,.92),rgba(30,45,64,.85));padding:9px 14px;font-size:.72rem;font-weight:600;letter-spacing:.08em;color:#fff;text-transform:uppercase;align-items:center;gap:8px;z-index:2;border-radius:var(--radius) var(--radius) 0 0}
+    .card.visited .visited-overlay{display:flex}
+    .vnp{font-weight:400;font-style:italic;text-transform:none;letter-spacing:0;opacity:.85;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px}
+
+    .rec-badge{display:none;position:absolute;bottom:66px;left:14px;right:14px;background:linear-gradient(135deg,var(--deep-rose),#c9a84c);border-radius:9px;padding:7px 12px;font-size:.72rem;font-weight:600;color:#fff;align-items:center;gap:6px;z-index:2;box-shadow:0 4px 16px rgba(176,90,68,.3);animation:badgePop .4s cubic-bezier(.34,1.56,.64,1) both}
+    .rec-badge.show{display:flex}
+    @keyframes badgePop{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
+
+    .card-image{height:170px;position:relative;overflow:hidden}
+    .card-image-inner{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:3.2rem;transition:transform .4s,filter .3s}
+    .card:hover .card-image-inner{transform:scale(1.08)}
+    .card-tag{position:absolute;top:12px;left:12px;background:rgba(255,255,255,.92);backdrop-filter:blur(6px);border-radius:100px;padding:3px 11px;font-size:.68rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--navy)}
+    .card-vibe{position:absolute;top:12px;right:12px;background:rgba(30,45,64,.7);backdrop-filter:blur(6px);border-radius:100px;padding:3px 9px;font-size:.68rem;color:rgba(255,255,255,.9);font-weight:500}
+
+    .card-body{padding:16px 16px 8px;flex:1;display:flex;flex-direction:column}
+    .card-hood{font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--rose);margin-bottom:5px}
+    .card-name{font-family:'Playfair Display',serif;font-size:1.15rem;color:var(--navy);margin-bottom:8px;line-height:1.3}
+    .card-desc{font-size:.84rem;color:var(--text-light);line-height:1.6;flex:1}
+
+    .card-footer{display:flex;align-items:center;justify-content:space-between;padding:10px 16px 14px;border-top:1px solid rgba(30,45,64,.07);margin-top:12px;gap:8px}
+    .card-meta{display:flex;flex-direction:column;gap:3px;min-width:0}
+    .card-best-for{font-size:.73rem;color:var(--text-light)}
+    .card-best-for strong{color:var(--deep-sage)}
+    .card-price{font-size:.75rem;font-weight:600;color:var(--gold)}
+
+    .been-here-btn{flex-shrink:0;display:flex;align-items:center;gap:5px;padding:6px 13px;border-radius:100px;border:1.5px solid rgba(30,45,64,.18);background:transparent;color:var(--text-light);font-size:.74rem;font-weight:600;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif;white-space:nowrap}
+    .been-here-btn:hover{border-color:var(--deep-sage);color:var(--deep-sage);background:rgba(92,122,92,.06)}
+    .card.visited .been-here-btn{background:var(--deep-sage);border-color:var(--deep-sage);color:#fff}
+    .card.visited .been-here-btn:hover{background:var(--rose);border-color:var(--rose)}
+
+    @media(min-width:900px){
+      .card.wide{grid-column:span 2;flex-direction:row}
+      .card.wide .card-image{width:280px;flex-shrink:0;height:auto}
+      .card.wide .card-body{padding:20px 20px 10px}
+      .card.wide .card-footer{padding:10px 20px 16px}
+    }
+
+    /* TIPS */
+    .tips-section{max-width:1200px;margin:0 auto;padding:0 24px 80px}
+    .tips-section h2{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,3vw,2rem);color:var(--navy);margin-bottom:22px}
+    .tips-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px}
+    .tip-card{background:var(--navy);border-radius:var(--radius);padding:26px 24px;color:rgba(255,255,255,.85);position:relative;overflow:hidden}
+    .tip-card::before{content:'"';position:absolute;top:-10px;left:14px;font-family:'Playfair Display',serif;font-size:8rem;color:rgba(255,255,255,.05);line-height:1;pointer-events:none}
+    .tip-card p{font-size:.88rem;line-height:1.7;position:relative}
+    .tip-label{font-size:.7rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+
+    .divider{max-width:1200px;margin:0 auto;padding:0 24px 48px}
+    .divider hr{border:none;height:1px;background:linear-gradient(to right,transparent,rgba(30,45,64,.1),transparent)}
+    footer{text-align:center;padding:48px 24px;background:var(--navy);color:rgba(255,255,255,.45);font-size:.82rem}
+    footer strong{color:rgba(255,255,255,.75)}
+
+    /* BG COLORS */
+    .bg-blush{background:linear-gradient(135deg,#f2d4c8,#e8b5a0)}
+    .bg-sage{background:linear-gradient(135deg,#c5dac5,#9cbf9c)}
+    .bg-navy{background:linear-gradient(135deg,#2d4a6b,#1e2d40)}
+    .bg-gold{background:linear-gradient(135deg,#e8d5a0,#c9a84c)}
+    .bg-lilac{background:linear-gradient(135deg,#d4c8e8,#b0a0cc)}
+    .bg-terra{background:linear-gradient(135deg,#e8c4a8,#cc9070)}
+    .bg-mint{background:linear-gradient(135deg,#c8e8e0,#8acbbc)}
+    .bg-rose{background:linear-gradient(135deg,#f0c8d0,#d4899a)}
+    .bg-slate{background:linear-gradient(135deg,#c8d4e0,#8aa0b8)}
+    .bg-peach{background:linear-gradient(135deg,#fde8d0,#f0b888)}
+    .bg-forest{background:linear-gradient(135deg,#b8d4b8,#6a9a6a)}
+    .bg-plum{background:linear-gradient(135deg,#e0c8e0,#b088b0)}
+
+    /* MODAL */
+    .modal-overlay{position:fixed;inset:0;z-index:1000;background:rgba(20,30,44,.6);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .25s}
+    .modal-overlay.open{opacity:1;pointer-events:all}
+    .modal{background:var(--warm-white);border-radius:24px;padding:34px 30px 30px;max-width:480px;width:100%;box-shadow:0 24px 80px rgba(20,30,44,.3);transform:translateY(20px) scale(.97);transition:transform .3s cubic-bezier(.34,1.56,.64,1);position:relative}
+    .modal-overlay.open .modal{transform:translateY(0) scale(1)}
+    .modal-close{position:absolute;top:14px;right:14px;width:30px;height:30px;border-radius:50%;border:none;background:rgba(30,45,64,.08);color:var(--text-light);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s}
+    .modal-close:hover{background:rgba(30,45,64,.15)}
+    .modal-emoji{font-size:2.3rem;margin-bottom:10px;display:block}
+    .modal-title{font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--navy);margin-bottom:5px}
+    .modal-sub{font-size:.86rem;color:var(--text-light);margin-bottom:22px;line-height:1.5}
+    .modal-slabel{font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--rose);margin-bottom:10px}
+    .tag-grid{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
+    .tag-chip{padding:6px 14px;border-radius:100px;border:1.5px solid rgba(30,45,64,.15);background:transparent;color:var(--text-light);font-size:.8rem;font-weight:500;cursor:pointer;transition:all .15s;font-family:'Inter',sans-serif}
+    .tag-chip:hover{border-color:var(--rose);color:var(--rose)}
+    .tag-chip.selected{background:var(--navy);border-color:var(--navy);color:#fff}
+    .modal-note{width:100%;border:1.5px solid rgba(30,45,64,.15);border-radius:12px;padding:11px 14px;font-family:'Inter',sans-serif;font-size:.86rem;color:var(--text);background:var(--cream);resize:none;outline:none;transition:border-color .2s;margin-bottom:22px;min-height:76px}
+    .modal-note:focus{border-color:var(--rose)}
+    .modal-note::placeholder{color:var(--text-light)}
+    .modal-footer{display:flex;gap:10px}
+    .btn-primary{flex:1;padding:13px 22px;border-radius:100px;border:none;background:var(--navy);color:#fff;font-size:.9rem;font-weight:600;cursor:pointer;transition:background .2s,transform .15s;font-family:'Inter',sans-serif}
+    .btn-primary:hover{background:var(--deep-rose);transform:translateY(-1px)}
+    .btn-secondary{padding:13px 18px;border-radius:100px;border:1.5px solid rgba(30,45,64,.15);background:transparent;color:var(--text-light);font-size:.86rem;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif}
+    .btn-secondary:hover{border-color:var(--rose);color:var(--rose)}
+    #modal-unmark{display:none;font-size:.78rem;color:var(--text-light);text-align:center;margin-top:10px;cursor:pointer;text-decoration:underline}
+    #modal-unmark:hover{color:var(--rose)}
+  </style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-bg-circles"><span></span><span></span><span></span></div>
+  <div class="hero-badge">Toronto · 2026 · Our City</div>
+  <h1>Our <em>Toronto</em></h1>
+  <p>Every spot we want to hit — filter by what works for you, mark what you've done, and let your taste shape the picks.</p>
+  <a href="#all-places" class="hero-cta">
+    See all places
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </a>
+  <div class="scroll-hint"><span>scroll</span><div class="scroll-hint-line"></div></div>
+</header>
+
+<!-- PICKS BAR -->
+<div id="picks-bar">
+  <div class="picks-bar-inner">
+    <h3>Been there</h3>
+    <div id="picks-summary"></div>
+    <div id="taste-insight"></div>
+  </div>
+</div>
+
+<!-- FILTERS -->
+<nav class="filter-section" id="all-places">
+  <div class="filter-inner">
+
+    <div class="filter-row">
+      <span class="filter-row-label">Activity</span>
+      <button class="filter-btn cat-btn" data-cat="food">🍽️ Food &amp; Drink</button>
+      <button class="filter-btn cat-btn" data-cat="bars">🍸 Bars</button>
+      <button class="filter-btn cat-btn" data-cat="outdoors">🌿 Outdoors</button>
+      <button class="filter-btn cat-btn" data-cat="arts">🎨 Arts</button>
+      <button class="filter-btn cat-btn" data-cat="markets">🛍️ Markets</button>
+      <button class="filter-btn cat-btn" data-cat="events">🎉 Events</button>
+      <div class="filter-sep"></div>
+      <button class="filter-btn" id="btn-visited">✓ Visited</button>
+      <button class="filter-btn" id="btn-recs">⭐ For you</button>
+      <button class="filter-clear" id="filter-clear">Clear all</button>
+    </div>
+
+    <div class="filter-row">
+      <span class="filter-row-label">Good for</span>
+      <button class="filter-btn for-btn" data-for="date">💕 Date night</button>
+      <button class="filter-btn for-btn" data-for="girls">👯 Girls' night</button>
+      <button class="filter-btn for-btn" data-for="solo">🧘 Solo</button>
+      <button class="filter-btn for-btn" data-for="groups">🎉 Groups</button>
+      <button class="filter-btn for-btn" data-for="morning">🌅 Morning</button>
+      <button class="filter-btn for-btn" data-for="late">🌙 Late night</button>
+      <button class="filter-btn for-btn" data-for="free">💸 Free / cheap</button>
+      <button class="filter-btn for-btn" data-for="cozy">🕯️ Cozy vibes</button>
+      <button class="filter-btn for-btn" data-for="outdoor">🌳 Outside</button>
+    </div>
+
+  </div>
+</nav>
+
+<!-- RESULTS COUNT -->
+<div id="results-bar">
+  <div id="results-count"></div>
+</div>
+
+<!-- ALL CARDS -->
+<main class="main-section">
+  <div class="cards-grid" id="cards-grid">
+
+    <div class="empty-state" id="empty-state">
+      <span class="ee">🔍</span>
+      <h3>No spots match those filters</h3>
+      <p>Try removing a filter or clearing them all.</p>
+    </div>
+
+    <!-- ══ FOOD & DRINK ══ -->
+
+    <div class="card wide" data-category="food" data-id="bar-eugenie"
+         data-vibes="romantic,cozy,natural-wine,food,intimate" data-good-for="date,girls,cozy" data-emoji="🍝">
+      <div class="visited-overlay"><span>✓ Been here</span><span class="vnp" id="note-bar-eugenie"></span></div>
+      <div class="card-image bg-terra">
+        <div class="card-image-inner">🍝</div>
+        <div class="card-tag">Editor's Pick</div><div class="card-vibe">Romantic</div>
+      </div>
+      <div class="card-body">
+        <div class="card-hood">Annex · Food &amp; Drink</div>
+        <div class="card-name">Bar Eugenie</div>
+        <div class="card-desc">Born from Alo alumni, Bar Eugenie is the Annex's most beloved dinner destination. Candlelit, seasonal, small-but-mighty menu. The kind of place where you linger over a second bottle of natural wine and forget what time it is.</div>
+      </div>
+      <div class="card-footer">
+        <div class="card-meta">
+          <div class="card-best-for">→ <strong>Best for:</strong> date night, special occasions</div>
+          <div class="card-price">$$$</div>
+        </div>
+        <button class="been-here-btn" data-id="bar-eugenie"><svg width="12" height="12" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="6" stroke="currentColor" stroke-width="1.4"/><path d="M4 6.5l1.8 1.8 3.2-3.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Been here</button>
+      </div>
+      <div class="rec-badge" id="rec-bar-eugenie"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1l1.5 3.1L12 4.6l-2.5 2.4.6 3.4L7 8.8l-3.1 1.6.6-3.4L2 4.6l3.5-.5L7 1z" fill="currentColor"/></svg><span></span></div>
+    </div>
+
+    <div class="card" data-category="food" data-id="nadege"
+         data-vibes="brunch,cozy,food,cocktails" data-good-for="girls,morning,date,cozy" data-emoji="🥐">
+      <div class="visited-overlay"><span>✓ Been here</span><span class="vnp" id="note-nadege"></span></div>
+      <div class="card-image bg-rose">
+        <div class="card-image-inner">🥐</div>
+        <div class="card-tag">Café</div><div class="card-vibe">Girls' trip</div>
+      </div>
+      <div class="card-body">
+        <div class="card-hood">Queen West · Food &amp; Drink</div>
+        <div class="card-name">Nadège Bistro &amp; Patisserie</div>
+        <div class="card-desc">Beloved patisserie levelled up with a full bistro menu by chef Laura Maxwell and a cocktail bar. Come for the flawless croissants, stay for afternoon spritzes.</div>
+      </div>
+      <div class="card-footer">
+        <div class="card-meta"><div class="card-best-for">→ <strong>Best for:</strong> brunch, girls' afternoon</div><div class="card-price">$$</div></div>
+        <button class="been-here-btn" data-id="nadege"><svg width="12" height="12" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="6" stroke="currentColor" stroke-width="1.4"/><path d="M4 6.5l1.8 1.8 3.2-3.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Been here</button>
+      </div>
+      <div class="rec-badge" id="rec-nadege"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1l1.5 3.1L12 4.6l-2.5 2.4.6 3.4L7 8.8l-3.1 1.6.6-3.4L2 4.6l3.5-.5L7 1z" fill="currentColor"/></svg><span></span></div>
+    </div>
+
+    <div class="card" data-category="food" data-id="mozys"
+         data-vibes="food,groups,lively" data-good-for="groups,girls,date" data-emoji="🔥">
+      <div class="visited-overlay"><span>✓ Been here</span><span class="vnp" id="note-mozys"></span></div>
+      <div class="card-image bg-gold">
+        <div class="card-image-inner">🔥</div>
+        <div class="card-tag">New Opening</div><div class="card-vibe">Groups</div>
+      </div>
+      <div class="card-body">
+        <div class="card-hood">Little Italy · Food &amp; Drink</div>
+        <div class="card-name">Mozy's</div>
+        <div class="card-desc">Charcoal-roasted rotisserie chicken by a former Alo chef, drawing on chef Barbode Soudi's Iranian heritage. The smoke, the spice, the saffron rice — the meal everyone gets obsessed with.</div>
+      </div>
+      <div class="card-footer">
+        <div class="card-meta"><div class="card-best-for">→ <strong>Best for:</strong> group dinners</div><div class="card-price">$$</div></div>
+        <button class="been-here-btn" data-id="mozys"><svg width="12" height="12" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="6" stroke="currentColor" stroke-width="1.4"/><path d="M4 6.5l1.8 1.8 3.2-3.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Been here</button>
+      </div>
+      <div class="rec-badge" id="rec-mozys"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1l1.5 3.1L12 4.6l-2.5 2.4.6 3.4L7 8.8l-3.1 1.6.6-3.4L2 4.6l3.5-.5L7 1z" fill="currentColor"/></svg><span></span></div>
+    </div>
+
+    <div class="card" data-category="food" data-id="weekend-cafe"
+         data-vibes="cozy,brunch,hidden-gem,solo" data-good-for="solo,morning,cozy" data-emoji="☕">
+      <div class="visited-overlay"><span>✓ Been here</span><span class="vnp" id="note-weekend-cafe"></span></div>
+      <div class="card-image bg-sage">
+        <div class="card-image-inner">☕</div>
+        <div class="card-tag">Hidden Gem</div><div class="card-vibe">Solo</div>
+      </div>
+      <div class="card-body">
+        <div class="card-hood">Roncesvalles · Food &amp; Drink</div>
+        <div class="card-name">A Weekend Café</div>
+        <div class="card-desc">Best corner window seats in the west end. Perfect pour-overs, rotating pastries from local bakers, and golden hour light on a Sunday morning. Feels like your own secret.</div>
+      </div>
+      <div class="card-footer">
+        <div class="card-meta"><div class="card-best-for">→ <strong>Best for:</strong> solo mornings</div><div class="card-price">$</div></div>
+        <button class="been-here-btn" data-id="weekend-cafe"><svg width="12" height="12" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="6" stroke="currentColor" stroke-width="1.4"/><path d="M4 6.5l1.8 1.8 3.2-3.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Been here</button>
+      </div>
+      <div class="rec-badge" id="rec-weekend-cafe"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1l1.5 3.1L12 4.6l-2.5 2.4.6 3.4L7 8.8l-3.1 1.6.6-3.4L2 4.6l3.5-.5L7 1z" fill="currentColor"/></svg><span></span></div>
+    </div>
+
+    <div class="card" data-category="food" data-id="bar-isabel"
+         data-vibes="romantic,cozy,food,intimate,natural-wine" data-good-for="date,girls,late,cozy" data-emoji="🥩">
+      <div class="visited-overlay"><span>✓ Been here</span><span class="vnp" id="note-bar-isabel"></span></div>
+      <div class="card-image bg-plum">
+        <div class="card-image-inner">🥩</div>
+        <div class="card-tag">Classic</div><div class="card-vibe">Date night</div>
+      </div>
+      <div class="card-body">
+        <div class="card-hood">Little Portugal · Food &amp; Drink</div>
+        <div class="card-name">Bar Isabel</div>
+        <div class="card-desc">Dimly lit Spanish tapas bar that's been a Toronto date-night staple for years. Grilled octopus, jamón, natural wines, and a candlelit room that makes everyone look beautiful. Late-night reservations are easier to snag.</div>
+      </div>
+      <div class="card-footer">
+        <div class="card-meta"><div class="card-best-for">→ <strong>Best for:</strong> romantic dinners, late nights</div><div class="card-price">$$$</div></div>
+        <button class="been-here-btn" data-id="bar-isabel"><svg width="12" height="12" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="6" stroke="currentColor" stroke-width="1.4"/><path d="M4 6.5l1.8 1.8 3.2-3.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Been here</button>
+      </div>
+      <div class="rec-badge" id="rec-bar-isabel"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1l1.5 3.1L12 4.6l-2.5 2.4.6 3.4L7 8.8l-3.1 1.6.6-3.4L2 4.6l3.5-.5L7 1z" fill="currentColor"/></svg><span></span></div>
+    </div>
+
+    <div class="card" data-category="food" data-id="pai"
+         data-vibes="food,groups,lively,bold-flavours" data-good-for="groups,girls,date" data-emoji="🍜">
+      <div class="visited-overlay"><span>✓ Been here</span><span class="vnp" id="note-pai"></span></div>
+      <div class="card-image bg-peach">
+        <div class="card-image-inner">🍜</div>
+        <div class="card-tag">Crowd Favourite</div><div class="card-vibe">Groups</div>
+      </div>
+      <div class="card-body">
+        <div class="card-hood">Downtown · Food &amp; Drink</div>
+        <div class="card-name">Pai Northern Thai Kitchen</div>
+        <div class="card-desc">Widely considered Toronto's best Thai restaurant. The khao soi is a religious experience. Order the sharing menu for the table, get the mango sticky rice for dessert. Expect a queue on weekends — it moves fast.</div>
+      </div>
+      <div class="card-footer">
+        <div class="card-meta"><div class="card-best-for">→ <strong>Best for:</strong> groups, sharing</div><div class="card-price">$$</div></div>
+        <button class="been-here-btn" data-id="pai"><svg width="12" height="12" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="6" stroke="currentColor" stroke-width="1.4"/><path d="M4 6.5l1.8 1.8 3.2-3.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Been here</button>
+      </div>
+      <div class="rec-badge" id="rec-pai"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1l1.5 3.1L12 4.6l-2.5 2.4.6 3.4L7 8.8l-3.1 1.6.6-3.4L2 4.6l3.5-.5L7 1z" fill="currentColor"/></svg><span></span></div>
+    </div>
+
+    <div class="card" data-category="food" data-id="lady-marmalade"
+         data-vibes="brunch,cozy,food,groups" data-good-for="girls,morning,groups,solo" data-emoji="🧇">
+      <div class="visited-overlay"><span>✓ Been here</span><span class="vnp" id="note-lady-marmalade"></span></div>
+      <div class="card-image bg-blush">
+        <div class="card-image-inner">🧇</div>
+        <div class="card-tag">Brunch Icon</div><div class="card-vibe">Weekend ritual</div>
+      </div>
+      <div class="card-body">
+        <div class="card-hood">Leslieville · Food &amp; Drink</div>
+        <div class="card-name">Lady Marmalade</div>
+        <div class="card-desc">Leslieville's most beloved brunch spot. The cheddar waffle eggs benny is worth the wait, and there will be a wait. Go early or late. The east-end walk to get here is half the charm on a sunny morning.</div>
+      </div>
+      <div class="card-footer">
+        <div class="card-meta"><div class="card-best-for">→ <strong>Best for:</strong> weekend brunch, groups</div><div class="card-price">$$</div></div>
+        <button class="been-here-btn" data-id="lady-marmalade"><svg width="12" height="12" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="6" stroke="currentColor" stroke-width="1.4"/><path d="M4 6.5l1.8 1.8 3.2-3.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Been here</button>
+      </div>
+      <div class="rec-badge" id="rec-lady-marmalade"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1l1.5 3.1L12 4.6l-2.5 2.4.6 3.4L7 8.8l-3.1 1.6.6-3.4L2 4.6l3.5-.5L7 1z" fill="currentColor"/></svg><span></span></div>
+    </div>
+
+    <div class="card" data-category="food" data-id="mahas"
+         data-vibes="brunch,hidden-gem,food,cozy" data-good-for="morning,solo,groups,date" data-emoji="🫓">
+      <div class="visited-overlay"><span>✓ Been here</span><span class="vnp" id="note-mahas"></span></div>
+      <div class="card-image bg-terra">
+        <div class="card-image-inner">🫓</div>
+        <div class="card-tag">Hidden Gem</div><div class="card-vibe">Special</div>
+      </div>
+      <div class="card-body">
+        <div class="card-hood">Greenwood · Food &amp; Drink</div>
+        <div class="card-name">Maha's Egyptian Brunch</div>
+        <div class="card-desc">Chef Maha Barsoom's tiny Egyptian soul food spot is unlike anything else in the city. Shakshuka, ful medames, homemade pita — brunch as a genuine cultural experience. One of Toronto's most special hidden gems.</div>
+      </div>
+      <div class="card-footer">
+        <div class="card-meta"><div class="card-best-for">→ <strong>Best for:</strong> adventurous mornings</div><div class="card-price">$$</div></div>
+        <button class="been-here-btn" data-id="mahas"><svg width="12" height="12" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="6" stroke="currentColor" stroke-width="1.4"/><path d="M4 6.5l1.8 1.8 3.2-3.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Been here</button>
+      </div>
+      <div class="rec-badge" id="rec-mahas"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1l1.5 3.1L12 4.6l-2.5 2.4.6 3.4L7 8.8l-3.1 1.6.6-3.4L2 4.6l3.5-.5L7 1z" fill="currentColor"/></svg><span></span></div>
+    </div>
+
+    <!-- ══ BARS ══ -->
+
+    <div class="card" data-category="bars" data-id="no-vacancy"
+         data-vibes="cocktails,romantic,intimate,lively" data-good-for="date,late,cozy" data-emoji="🍸">
+      <div class="visited-overlay"><span>✓ Been here</span><span class="vnp" id="note-no-vacancy"></span></div>
+      <div class="card-image bg-navy">
+        <div class="card-image-inner">🍸</div>
+        <div class="card-tag">Canada's Best New Bar</div><div class="card-vibe">Date night</div>
+      </div>
+      <div class="card-body">
+        <div class="card-hood">Downtown · Bars &amp; Nightlife</div>
+        <div class="card-name">No Vacancy</div>
+        <div class="card-desc">Named Canada's Best New Bar 2026. Razor-sharp cocktail program, moody intimate room. Book a stool at the bar and let the bartenders guide you through the menu.</div>
+      </div>
+      <div class="card-footer">
+        <div class="card-meta"><div class="card-best-for">→ <strong>Best for:</strong> date night, cocktail nerds</div><div class="card-price">$$$</div></div>
+        <button class="been-here-btn" data-id="no-vacancy"><svg width="12" height="12" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="6" stroke="currentColor" stroke-width="1.4"/><path d="M4 6.5l1.8 1.8 3.2-3.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Been here</button>
+      </div>
+      <div class="rec-badge" id="rec-no-vacancy"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1l1.5 3.1L12 4.6l-2.5 2.4.6 3.4L7 8.8l-3.1 1.6.6-3.4L2 4.6l3.5-.5L7 1z" fill="currentColor"/></svg><span></span></div>
+    </div>
+
+    <div class="card" data-category="bars" data-id="bar-allegro"
+         data-vibes="cocktails,lively,groups" data-good-for="girls,groups,late,date" data-emoji="🥂">
+      <div class="visited-overlay"><span>✓ Been here</span><span class="vnp" id="note-bar-allegro"></span></div>
+      <div class="card-image bg-blush">
+        <div class="card-image-inner">🥂</div>
+        <div class="card-tag">Industry Favourite</div><div class="card-vibe">Girls' night</div>
+      </div>
+      <div class="card-body">
+        <div class="card-hood">Ossington · Bars &amp; Nightlife</div>
+        <div class="card-name">Bar Allegro</div>
+        <div class="card-desc">From the team behind Pompette. Instantly the spot where hospitality insiders go to unwind. Dialled-in cocktails, a room that hums with exactly the right energy.</div>
+      </div>
+      <div class="card-footer">
+        <div class="card-meta"><div class="card-best-for">→ <strong>Best for:</strong> girls' night, industry crowd</div><div class="card-price">$$</div></div>
+        <button class="been-here-btn" data-id="bar-allegro"><svg width="12" height="12" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="6" stroke="currentColor" stroke-width="1.4"/><path d="M4 6.5l1.8 1.8 3.2-3.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Been here</button>
+      </div>
+      <div class="rec-badge" id="rec-bar-allegro"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1l1.5 3.1L12 4.6l-2.5 2.4.6 3.4L7 8.8l-3.1 1.6.6-3.4L2 4.6l3.5-.5L7 1z" fill="currentColor"/></svg><span></span></div>
+    </div>
+
+    <div class="card" data-category="bars" data-id="915-dupont"
+         data-vibes="natural-wine,cozy,hidden-gem,intimate" data-good-for="date,girls,cozy" data-emoji="🍷">
+      <div class="visited-overlay"><span>✓ Been here</span><span class="vnp" id="note-915-dupont"></span></div>
+      <div class="card-image bg-lilac">
+        <div class="card-image-inner">🍷</div>
+        <div class="card-tag">Low-key gem</div><div class="card-vibe">Cozy</div>
+      </div>
+      <div class="card-body">
+        <div class="card-hood">Dupont · Bars &amp; Nightlife</div>
+        <div class="card-name">915 Dupont</div>
+        <div class="card-desc">2026 Canada's 50 Best Bars newcomer. Rotating natural wine list, small plates, and the atmosphere where you can actually hear your friends talk. A proper neighbourhood gem.</div>
+      </div>
+      <div class="card-footer">
+        <div class="card-meta"><div class="card-best-for">→ <strong>Best for:</strong> catch-ups, chill evenings</div><div class="card-price">$$</div></div>
+        <button class="been-here-btn" data-id="915-dupont"><svg width="12" height="12" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="6" stroke="currentColor" stroke-width="1.4"/><path d="M4 6.5l1.8 1.8 3.2-3.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Been here</button>
+      </div>
+      <div class="rec-badge" id="rec-915-dupont"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1l1.5 3.1L12 4.6l-2.5 2.4.6 3.4L7 8.8l-3.1 1.6.6-3.4L2 4.6l3.5-.5L7 1z" fill="currentColor"/></svg><span></span></div>
+    </div>
+
+    <div class="card" data-category="bars" data-id="sweaty-bettys"
+         data-vibes="lively,groups,cheap,dancing" data-good-for="groups,girls,late,free" data-emoji="🍺">
+      <div class="visited-overlay"><span>✓ Been here</span><span class="vnp" id="note-sweaty-bettys"></span></div>
+      <div class="card-image bg-terra">
+        <div class="card-image-inner">🍺</div>
+        <div class="card-tag">Dive Vibes</div><div class="card-vibe">Big groups</div>
+      </div>
+      <div class="card-body">
+        <div class="card-hood">Kensington Market · Bars &amp; Nightlife</div>
+        <div class="card-name">Sweaty Betty's</div>
+        <div class="card-desc">Kensington institution and 2026 Canada's 50 Best Bars honouree. Cheap drinks, no pretension, best impromptu dance floor in the city. Show up late, leave whenever, feel alive.</div>
+      </div>
+      <div class="card-footer">
+        <div class="card-meta"><div class="card-best-for">→ <strong>Best for:</strong> big groups, spontaneous nights</div><div class="card-price">$</div></div>
+        <button class="been-here-btn" data-id="sweaty-bettys"><svg width="12" height="12" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="6" stroke="currentColor" stroke-width="1.4"/><path d="M4 6.5l1.8 1.8 3.2-3.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Been here</button>
+      </div>
+      <div class="rec-badge" id="rec-sweaty-bettys"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1l1.5 3.1L12 4.6l-2.5 2.4.6 3.4L7 8.8l-3.1 1.6.6-3.4L2 4.6l3.5-.5L7 1z" fill="currentColor"/></svg><span></span></div>
+    </div>
+
+    <div class="card" data-category="bars" data-id="bellwoods"
+         data-vibes="cozy,groups,food,lively" data-good-for="groups,girls,date,cozy,outdoor" data-emoji="🍻">
+      <div class="visited-overlay"><span>✓ Been here</span><span class="vnp" id="note-bellwoods"></span></div>
+      <div class="card-image bg-forest">
+        <div class="card-image-inner">🍻</div>
+        <div class="card-tag">West End Icon</div><div class="card-vibe">Groups</div>
+      </div>
+      <div class="card-body">
+        <div class="card-hood">Ossington · Bars &amp; Nightlife</div>
+        <div class="card-name">Bellwoods Brewery</div>
+        <div class="card-desc">The west end's most beloved craft brewery — their Jelly King sour is legendary. Grab a pint at the bar or take cans to Trinity Bellwoods Park right around the corner. The patio in summer is absolutely essential Toronto.</div>
+      </div>
+      <div class="card-footer">
+        <div class="card-meta"><div class="card-best-for">→ <strong>Best for:</strong> groups, park pints, summer</div><div class="card-price">$$</div></div>
+        <button class="been-here-btn" data-id="bellwoods"><svg width="12" height="12" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="6" stroke="currentColor" stroke-width="1.4"/><path d="M4 6.5l1.8 1.8 3.2-3.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Been here</button>
+      </div>
+      <div class="rec-badge" id="rec-bellwoods"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1l1.5 3.1L12 4.6l-2.5 2.4.6 3.4L7 8.8l-3.1 1.6.6-3.4L2 4.6l3.5-.5L7 1z" fill="currentColor"/></svg><span></span></div>
+    </div>
+
+    <div class="card" data-category="bars" data-id="bar-piquette"
+         data-vibes="natural-wine,cozy,romantic,intimate,hidden-gem" data-good-for="date,girls,cozy" data-emoji="🫧">
+      <div class="visited-overlay"><span>✓ Been here</span><span class="vnp" id="note-bar-piquette"></span></div>
+      <div class="card-image bg-mint">
+        <div class="card-image-inner">🫧</div>
+        <div class="card-tag">Hidden Gem</div><div class="card-vibe">Intimate</div>
+      </div>
+      <div class="card-body">
+        <div class="card-hood">Dundas West · Bars &amp; Nightlife</div>
+        <div class="card-name">Bar Piquette</div>
+        <div class="card-desc">A cozy wine bar that feels like a well-kept secret. Low lighting, natural wines poured by people who clearly love them, and an effortlessly cool crowd. Perfect for a relaxed evening conversation that stretches into midnight.</div>
+      </div>
+      <div class="card-footer">
+        <div class="card-meta"><div class="card-best-for">→ <strong>Best for:</strong> wine dates, girls' evenings</div><div class="card-price">$$</div></div>
+        <button class="been-here-btn" data-id="bar-piquette"><svg width="12" height="12" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="6" stroke="currentColor" stroke-width="1.4"/><path d="M4 6.5l1.8 1.8 3.2-3.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Been here</button>
+      </div>
+      <div class="rec-badge" id="rec-bar-piquette"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1l1.5 3.1L12 4.6l-2.5 2.4.6 3.4L7 8.8l-3.1 1.6.6-3.4L2 4.6l3.5-.5L7 1z" fill="currentColor"/></svg><span></span></div>
+    </div>
+
+    <div class="card" data-category="bars" data-id="drake-hotel"
+         data-vibes="lively,cocktails,groups,dancing,cultural" data-good-for="girls,groups,late,date" data-emoji="🎸">
+      <div class="visited-overlay"><span>✓ Been here</span><span class="vnp" id="note-drake-hotel"></span></div>
+      <div class="card-image bg-slate">
+        <div class="card-image-inner">🎸</div>
+        <div class="card-tag">Toronto Icon</div><div class="card-vibe">Lively</div>
+      </div>
+      <div class="card-body">
+        <div class="card-hood">Queen West · Bars &amp; Nightlife</div>
+        <div class="card-name">The Drake Hotel</div>
+        <div class="card-desc">Toronto's most iconic boutique hotel bar. The main bar hums all week, the rooftop is perfect in summer, and the underground venue hosts the best live shows on Queen West. Always something happening.</div>
+      </div>
+      <div class="card-footer">
+        <div class="card-meta"><div class="card-best-for">→ <strong>Best for:</strong> girls' nights, live music</div><div class="card-price">$$</div></div>
+        <button class="been-here-btn" data-id="drake-hotel"><svg width="12" height="12" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="6" stroke="currentColor" stroke-width="1.4"/><path d="M4 6.5l1.8 1.8 3.2-3.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Been here</button>
+      </div>
+      <div class="rec-badge" id="rec-drake-hotel"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1l1.5 3.1L12 4.6l-2.5 2.4.6 3.4L7 8.8l-3.1 1.6.6-3.4L2 4.6l3.5-.5L7 1z" fill="currentColor"/></svg><span></span></div>
+    </div>
+
+    <!-- ══ OUTDOORS ══ -->
+
+    <div class="card wide" data-category="outdoors" data-id="don-valley"
+         data-vibes="outdoor,free,hidden-gem,cozy,solo" data-good-for="solo,morning,free,outdoor,date" data-emoji="🌿">
+      <div class="visited-overlay"><span>✓ Been here</span><span class="vnp" id="note-don-valley"></span></div>
+      <div class="card-image bg-mint">
+        <div class="card-image-inner">🌿</div>
+        <div class="card-tag">Hidden Gem</div><div class="card-vibe">Sunday mornings</div>
+      </div>
+      <div class="card-body">
+        <div class="card-hood">East York · Outdoors</div>
+        <div class="card-name">The Don Valley Ravine System</div>
+        <div class="card-desc">Toronto's secret wilderness — kilometres of wooded trails through the city's heart. Enter at Pottery Road in East York for the best forested stretch. Spring mornings: birdsong, the creek, green canopy, and almost no one else. Bring coffee.</div>
+      </div>
+      <div class="card-footer">
+        <div class="card-meta"><div class="card-best-for">→ <strong>Best for:</strong> Sunday walks, nature reset</div><div class="card-price">Free</div></div>
+        <button class="been-here-btn" data-id="don-valley"><svg width="12" height="12" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="6" stroke="currentColor" stroke-width="1.4"/><path d="M4 6.5l1.8 1.8 3.2-3.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Been here</button>
+      </div>
+      <div class="rec-badge" id="rec-don-valley"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1l1.5 3.1L12 4.6l-2.5 2.4.6 3.4L7 8.8l-3.1 1.6.6-3.4L2 4.6l3.5-.5L7 1z" fill="currentColor"/></svg><span></span></div>
+    </div>
+
+    <div class="card" data-category="outdoors" data-id="toronto-islands"
+         data-vibes="outdoor,groups,free,waterfront" data-good-for="groups,free,outdoor,date,morning" data-emoji="☀️">
+      <div class="visited-overlay"><span>✓ Been here</span><span class="vnp" id="note-toronto-islands"></span></div>
+      <div class="card-image bg-gold">
+        <div class="card-image-inner">☀️</div>
+        <div class="card-tag">Summer Favourite</div><div class="card-vibe">Groups</div>
+      </div>
+      <div class="card-body">
+        <div class="card-hood">Toronto Islands · Outdoors</div>
+        <div class="card-name">Toronto Islands</div>
+        <div class="card-desc">10-minute ferry to a car-free island with beaches, bike rentals, picnic meadows, and skyline views that make your Instagram completely unfair. Ward's Island beach is the locals' pick.</div>
+      </div>
+      <div class="card-footer">
+        <div class="card-meta"><div class="card-best-for">→ <strong>Best for:</strong> summer group days</div><div class="card-price">$ (ferry)</div></div>
+        <button class="been-here-btn" data-id="toronto-islands"><svg width="12" height="12" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="6" stroke="currentColor" stroke-width="1.4"/><path d="M4 6.5l1.8 1.8 3.2-3.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Been here</button>
+      </div>
+      <div class="rec-badge" id="rec-toronto-islands"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1l1.5 3.1L12 4.6l-2.5 2.4.6 3.4L7 8.8l-3.1 1.6.6-3.4L2 4.6l3.5-.5L7 1z" fill="currentColor"/></svg><span></span></div>
+    </div>
+
+    <div class="card" data-category="outdoors" data-id="high-park"
+         data-vibes="outdoor,free,groups,solo,romantic" data-good-for="date,solo,groups,free,outdoor,morning" data-emoji="🌸">
+      <div class="visited-overlay"><span>✓ Been here</span><span class="vnp" id="note-high-park"></span></div>
+      <div class="card-image bg-rose">
+        <div class="card-image-inner">🌸</div>
+        <div class="card-tag">City Classic</div><div class="card-vibe">Everyone</div>
+      </div>
+      <div class="card-body">
+        <div class="card-hood">High Park · Outdoors</div>
+        <div class="card-name">High Park</div>
+        <div class="card-desc">Toronto's most beautiful park — 161 hectares of trails, a free zoo, Grenadier Pond, and the city's most dramatic cherry blossom display every late April. The hill overlooking the pond at golden hour is one of the best views in the city.</div>
+      </div>
+      <div class="card-footer">
+        <div class="card-meta"><div class="card-best-for">→ <strong>Best for:</strong> all seasons, all moods</div><div class="card-price">Free</div></div>
+        <button class="been-here-btn" data-id="high-park"><svg width="12" height="12" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="6" stroke="currentColor" stroke-width="1.4"/><path d="M4 6.5l1.8 1.8 3.2-3.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Been here</button>
+      </div>
+      <div class="rec-badge" id="rec-high-park"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1l1.5 3.1L12 4.6l-2.5 2.4.6 3.4L7 8.8l-3.1 1.6.6-3.4L2 4.6l3.5-.5L7 1z" fill="currentColor"/></svg><span></span></div>
+    </div>
+
+    <div class="card" data-category="outdoors" data-id="scarborough-bluffs"
+         data-vibes="outdoor,free,hidden-gem,romantic" data-good-for="date,solo,groups,free,outdoor" data-emoji="🏔️">
+      <div class="visited-overlay"><span>✓ Been here</span><span class="vnp" id="note-scarborough-bluffs"></span></div>
+      <div class="card-image bg-slate">
+        <div class="card-image-inner">🏔️</div>
+        <div class="card-tag">Hidden in Plain Sight</div><div class="card-vibe">Dramatic</div>
+      </div>
+      <div class="card-body">
+        <div class="card-hood">Scarborough · Outdoors</div>
+        <div class="card-name">Scarborough Bluffs</div>
+        <div class="card-desc">Toronto's most dramatic landscape — 90-metre white clay cliffs rising from the lake. Walk along the top for jaw-dropping views, or take the trail down to the beach at Bluffer's Park. Most Torontonians never make the trip. That's their loss.</div>
+      </div>
+      <div class="card-footer">
+        <div class="card-meta"><div class="card-best-for">→ <strong>Best for:</strong> adventure days, stunning views</div><div class="card-price">Free</div></div>
+        <button class="been-here-btn" data-id="scarborough-bluffs"><svg width="12" height="12" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="6" stroke="currentColor" stroke-width="1.4"/><path d="M4 6.5l1.8 1.8 3.2-3.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Been here</button>
+      </div>
+      <div class="rec-badge" id="rec-scarborough-bluffs"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1l1.5 3.1L12 4.6l-2.5 2.4.6 3.4L7 8.8l-3.1 1.6.6-3.4L2 4.6l3.5-.5L7 1z" fill="currentColor"/></svg><span></span></div>
+    </div>
+
+    <div class="card" data-category="outdoors" data-id="trinity-bellwoods"
+         data-vibes="outdoor,free,groups,lively" data-good-for="groups,solo,free,outdoor,morning,date" data-emoji="⛳">
+      <div class="visited-overlay"><span>✓ Been here</span><span class="vnp" id="note-trinity-bellwoods"></span></div>
+      <div class="card-image bg-forest">
+        <div class="card-image-inner">⛳</div>
+        <div class="card-tag">The Park</div><div class="card-vibe">Iconic</div>
+      </div>
+      <div class="card-body">
+        <div class="card-hood">Trinity Bellwoods · Outdoors</div>
+        <div class="card-name">Trinity Bellwoods Park</div>
+        <div class="card-desc">The social heart of Toronto's west end. On a sunny weekend afternoon, everyone is here — dogs, picnics, vintage bikes, coffee from the local café. Grab Bellwoods Brewery cans from the shop next door and join the scene.</div>
+      </div>
+      <div class="card-footer">
+        <div class="card-meta"><div class="card-best-for">→ <strong>Best for:</strong> Sunday people-watching</div><div class="card-price">Free</div></div>
+        <button class="been-here-btn" data-id="trinity-bellwoods"><svg width="12" height="12" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="6" stroke="currentColor" stroke-width="1.4"/><path d="M4 6.5l1.8 1.8 3.2-3.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Been here</button>
+      </div>
+      <div class="rec-badge" id="rec-trinity-bellwoods"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1l1.5 3.1L12 4.6l-2.5 2.4.6 3.4L7 8.8l-3.1 1.6.6-3.4L2 4.6l3.5-.5L7 1z" fill="currentColor"/></svg><span></span></div>
+    </div>
+
+    <div class="card" data-category="outdoors" data-id="harbourfront"
+         data-vibes="outdoor,free,cultural,waterfront" data-good-for="groups,solo,free,outdoor,date,morning" data-emoji="🌊">
+      <div class="visited-overlay"><span>✓ Been here</span><span class="vnp" id="note-harbourfront"></span></div>
+      <div class="card-image bg-sage">
+        <div class="card-image-inner">🌊</div>
+        <div class="card-tag">Waterfront</div><div class="card-vibe">Everyone</div>
+      </div>
+      <div class="card-body">
+        <div class="card-hood">Harbourfront · Outdoors</div>
+        <div class="card-name">Harbourfront Centre</div>
+        <div class="card-desc">Free concerts, outdoor art installations, and lake views year-round. The Power Plant gallery is free on Fridays. Wander the waterfront boardwalk as the sun goes down — 10 minutes from Union Station on foot.</div>
+      </div>
+      <div class="card-footer">
+        <div class="card-meta"><div class="card-best-for">→ <strong>Best for:</strong> free afternoons, date walks</div><div class="card-price">Free</div></div>
+        <button class="been-here-btn" data-id="harbourfront"><svg width="12" height="12" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="6" stroke="currentColor" stroke-width="1.4"/><path d="M4 6.5l1.8 1.8 3.2-3.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Been here</button>
+      </div>
+      <div class="rec-badge" id="rec-harbourfront"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1l1.5 3.1L12 4.6l-2.5 2.4.6 3.4L7 8.8l-3.1 1.6.6-3.4L2 4.6l3.5-.5L7 1z" fill="currentColor"/></svg><span></span></div>
+    </div>
+
+    <!-- ══ ARTS ══ -->
+
+    <div class="card" data-category="arts" data-id="ago"
+         data-vibes="cultural,romantic,solo,cozy" data-good-for="date,solo,groups,cozy" data-emoji="🖼️">
+      <div class="visited-overlay"><span>✓ Been here</span><span class="vnp" id="note-ago"></span></div>
+      <div class="card-image bg-lilac">
+        <div class="card-image-inner">🖼️</div>
+        <div class="card-tag">Major Institution</div><div class="card-vibe">Culture date</div>
+      </div>
+      <div class="card-body">
+        <div class="card-hood">Downtown · Arts &amp; Culture</div>
+        <div class="card-name">Art Gallery of Ontario</div>
+        <div class="card-desc">One of the largest art museums in North America, housed in a stunning Frank Gehry-designed building. World-class rotating exhibitions plus an incredible permanent collection. Wednesday evenings are pay-what-you-can.</div>
+      </div>
+      <div class="card-footer">
+        <div class="card-meta"><div class="card-best-for">→ <strong>Best for:</strong> art dates, rainy days</div><div class="card-price">$$ (free Wed eve)</div></div>
+        <button class="been-here-btn" data-id="ago"><svg width="12" height="12" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="6" stroke="currentColor" stroke-width="1.4"/><path d="M4 6.5l1.8 1.8 3.2-3.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Been here</button>
+      </div>
+      <div class="rec-badge" id="rec-ago"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1l1.5 3.1L12 4.6l-2.5 2.4.6 3.4L7 8.8l-3.1 1.6.6-3.4L2 4.6l3.5-.5L7 1z" fill="currentColor"/></svg><span></span></div>
+    </div>
+
+    <div class="card" data-category="arts" data-id="tiff"
+         data-vibes="cultural,cozy,romantic,intimate" data-good-for="date,solo,cozy" data-emoji="🎞️">
+      <div class="visited-overlay"><span>✓ Been here</span><span class="vnp" id="note-tiff"></span></div>
+      <div class="card-image bg-navy">
+        <div class="card-image-inner">🎞️</div>
+        <div class="card-tag">Film Hub</div><div class="card-vibe">Film lovers</div>
+      </div>
+      <div class="card-body">
+        <div class="card-hood">Entertainment District · Arts &amp; Culture</div>
+        <div class="card-name">TIFF Bell Lightbox</div>
+        <div class="card-desc">Year-round programming at the home of TIFF. Retrospectives, indie premiers, international cinema, and filmmaker talks. The bar downstairs is ideal before or after. September is wild — festival energy takes over the whole block.</div>
+      </div>
+      <div class="card-footer">
+        <div class="card-meta"><div class="card-best-for">→ <strong>Best for:</strong> film dates, film festival season</div><div class="card-price">$$</div></div>
+        <button class="been-here-btn" data-id="tiff"><svg width="12" height="12" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="6" stroke="currentColor" stroke-width="1.4"/><path d="M4 6.5l1.8 1.8 3.2-3.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Been here</button>
+      </div>
+      <div class="rec-badge" id="rec-tiff"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1l1.5 3.1L12 4.6l-2.5 2.4.6 3.4L7 8.8l-3.1 1.6.6-3.4L2 4.6l3.5-.5L7 1z" fill="currentColor"/></svg><span></span></div>
+    </div>
+
+    <div class="card" data-category="arts" data-id="distillery"
+         data-vibes="cultural,groups,outdoor,romantic" data-good-for="date,groups,solo,outdoor" data-emoji="🎨">
+      <div class="visited-overlay"><span>✓ Been here</span><span class="vnp" id="note-distillery"></span></div>
+      <div class="card-image bg-plum">
+        <div class="card-image-inner">🎨</div>
+        <div class="card-tag">Neighbourhood</div><div class="card-vibe">Culture date</div>
+      </div>
+      <div class="card-body">
+        <div class="card-hood">Distillery District · Arts &amp; Culture</div>
+        <div class="card-name">Distillery District</div>
+        <div class="card-desc">Beautifully preserved Victorian industrial complex home to galleries, indie boutiques, and the best people-watching in the city. Cobblestone streets, courtyard cafés, and rotating installations.</div>
+      </div>
+      <div class="card-footer">
+        <div class="card-meta"><div class="card-best-for">→ <strong>Best for:</strong> artsy afternoons, visitors</div><div class="card-price">Free to browse</div></div>
+        <button class="been-here-btn" data-id="distillery"><svg width="12" height="12" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="6" stroke="currentColor" stroke-width="1.4"/><path d="M4 6.5l1.8 1.8 3.2-3.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Been here</button>
+      </div>
+      <div class="rec-badge" id="rec-distillery"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1l1.5 3.1L12 4.6l-2.5 2.4.6 3.4L7 8.8l-3.1 1.6.6-3.4L2 4.6l3.5-.5L7 1z" fill="currentColor"/></svg><span></span></div>
+    </div>
+
+    <div class="card" data-category="arts" data-id="bloor-hotdocs"
+         data-vibes="cultural,cozy,hidden-gem,intimate" data-good-for="date,solo,cozy" data-emoji="🎬">
+      <div class="visited-overlay"><span>✓ Been here</span><span class="vnp" id="note-bloor-hotdocs"></span></div>
+      <div class="card-image bg-slate">
+        <div class="card-image-inner">🎬</div>
+        <div class="card-tag">Cinema</div><div class="card-vibe">Film lovers</div>
+      </div>
+      <div class="card-body">
+        <div class="card-hood">Bloor West · Arts &amp; Culture</div>
+        <div class="card-name">Bloor Hot Docs Cinema</div>
+        <div class="card-desc">Toronto's most beloved indie cinema. Classic architecture, documentaries, indie films, and a repertory programme better than anything on streaming. The Bloor street corner has the city's best post-film café options.</div>
+      </div>
+      <div class="card-footer">
+        <div class="card-meta"><div class="card-best-for">→ <strong>Best for:</strong> film dates, solo evenings</div><div class="card-price">$$</div></div>
+        <button class="been-here-btn" data-id="bloor-hotdocs"><svg width="12" height="12" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="6" stroke="currentColor" stroke-width="1.4"/><path d="M4 6.5l1.8 1.8 3.2-3.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Been here</button>
+      </div>
+      <div class="rec-badge" id="rec-bloor-hotdocs"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1l1.5 3.1L12 4.6l-2.5 2.4.6 3.4L7 8.8l-3.1 1.6.6-3.4L2 4.6l3.5-.5L7 1z" fill="currentColor"/></svg><span></span></div>
+    </div>
+
+    <!-- ══ MARKETS ══ -->
+
+    <div class="card wide" data-category="markets" data-id="st-lawrence"
+         data-vibes="food,groups,cultural,morning,brunch" data-good-for="morning,groups,solo,free" data-emoji="🧺">
+      <div class="visited-overlay"><span>✓ Been here</span><span class="vnp" id="note-st-lawrence"></span></div>
+      <div class="card-image bg-peach">
+        <div class="card-image-inner">🧺</div>
+        <div class="card-tag">Toronto Institution</div><div class="card-vibe">Saturday ritual</div>
+      </div>
+      <div class="card-body">
+        <div class="card-hood">Old Town · Markets</div>
+        <div class="card-name">St. Lawrence Market</div>
+        <div class="card-desc">One of the world's great food markets, running since 1803. Saturday is the main event — over 120 vendors selling fresh produce, cheese, charcuterie, baked goods, and the famous peameal bacon sandwich you must eat standing at the counter. Get there before 10am.</div>
+      </div>
+      <div class="card-footer">
+        <div class="card-meta"><div class="card-best-for">→ <strong>Best for:</strong> Saturday mornings, food lovers</div><div class="card-price">Free entry</div></div>
+        <button class="been-here-btn" data-id="st-lawrence"><svg width="12" height="12" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="6" stroke="currentColor" stroke-width="1.4"/><path d="M4 6.5l1.8 1.8 3.2-3.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Been here</button>
+      </div>
+      <div class="rec-badge" id="rec-st-lawrence"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1l1.5 3.1L12 4.6l-2.5 2.4.6 3.4L7 8.8l-3.1 1.6.6-3.4L2 4.6l3.5-.5L7 1z" fill="currentColor"/></svg><span></span></div>
+    </div>
+
+    <div class="card" data-category="markets" data-id="evergreen-brick-works"
+         data-vibes="outdoor,cultural,groups,free,morning" data-good-for="morning,groups,solo,free,outdoor" data-emoji="🌱">
+      <div class="visited-overlay"><span>✓ Been here</span><span class="vnp" id="note-evergreen-brick-works"></span></div>
+      <div class="card-image bg-forest">
+        <div class="card-image-inner">🌱</div>
+        <div class="card-tag">Market + Nature</div><div class="card-vibe">Saturday vibes</div>
+      </div>
+      <div class="card-body">
+        <div class="card-hood">Don Valley · Markets</div>
+        <div class="card-name">Evergreen Brick Works</div>
+        <div class="card-desc">A Saturday farmers market inside a stunning converted industrial heritage site, backed right up to the Don Valley ravines. Local food, live music, chef demos, and trails to walk after. One of Toronto's most beautiful Saturday destinations.</div>
+      </div>
+      <div class="card-footer">
+        <div class="card-meta"><div class="card-best-for">→ <strong>Best for:</strong> Saturday mornings, outdoorsy types</div><div class="card-price">Free entry</div></div>
+        <button class="been-here-btn" data-id="evergreen-brick-works"><svg width="12" height="12" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="6" stroke="currentColor" stroke-width="1.4"/><path d="M4 6.5l1.8 1.8 3.2-3.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Been here</button>
+      </div>
+      <div class="rec-badge" id="rec-evergreen-brick-works"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1l1.5 3.1L12 4.6l-2.5 2.4.6 3.4L7 8.8l-3.1 1.6.6-3.4L2 4.6l3.5-.5L7 1z" fill="currentColor"/></svg><span></span></div>
+    </div>
+
+    <div class="card" data-category="markets" data-id="pedestrian-sundays"
+         data-vibes="groups,free,cultural,lively,outdoor" data-good-for="groups,free,outdoor,morning" data-emoji="🛒">
+      <div class="visited-overlay"><span>✓ Been here</span><span class="vnp" id="note-pedestrian-sundays"></span></div>
+      <div class="card-image bg-blush">
+        <div class="card-image-inner">🛒</div>
+        <div class="card-tag">Monthly Event</div><div class="card-vibe">Weekend ritual</div>
+      </div>
+      <div class="card-body">
+        <div class="card-hood">Kensington Market · Markets</div>
+        <div class="card-name">Pedestrian Sundays</div>
+        <div class="card-desc">Once a month on Sundays the cars disappear and Kensington transforms. Food stalls spill onto the street, performers set up on every corner, the whole city congregates here. Gloriously chaotic, completely free.</div>
+      </div>
+      <div class="card-footer">
+        <div class="card-meta"><div class="card-best-for">→ <strong>Best for:</strong> groups, spontaneous Sundays</div><div class="card-price">Free</div></div>
+        <button class="been-here-btn" data-id="pedestrian-sundays"><svg width="12" height="12" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="6" stroke="currentColor" stroke-width="1.4"/><path d="M4 6.5l1.8 1.8 3.2-3.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Been here</button>
+      </div>
+      <div class="rec-badge" id="rec-pedestrian-sundays"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1l1.5 3.1L12 4.6l-2.5 2.4.6 3.4L7 8.8l-3.1 1.6.6-3.4L2 4.6l3.5-.5L7 1z" fill="currentColor"/></svg><span></span></div>
+    </div>
+
+    <div class="card" data-category="markets" data-id="leslieville-market"
+         data-vibes="brunch,hidden-gem,free,morning" data-good-for="solo,morning,free" data-emoji="🌻">
+      <div class="visited-overlay"><span>✓ Been here</span><span class="vnp" id="note-leslieville-market"></span></div>
+      <div class="card-image bg-terra">
+        <div class="card-image-inner">🌻</div>
+        <div class="card-tag">Neighbourhood Market</div><div class="card-vibe">Morning ritual</div>
+      </div>
+      <div class="card-body">
+        <div class="card-hood">East End · Markets</div>
+        <div class="card-name">Leslieville Farmers Market</div>
+        <div class="card-desc">The east end's Saturday neighbourhood market. Local produce, sourdough bakers, flower vendors, and the best fresh coffee you'll have all week. Go before 10am when the selection is full.</div>
+      </div>
+      <div class="card-footer">
+        <div class="card-meta"><div class="card-best-for">→ <strong>Best for:</strong> solo Saturdays</div><div class="card-price">Free entry</div></div>
+        <button class="been-here-btn" data-id="leslieville-market"><svg width="12" height="12" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="6" stroke="currentColor" stroke-width="1.4"/><path d="M4 6.5l1.8 1.8 3.2-3.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Been here</button>
+      </div>
+      <div class="rec-badge" id="rec-leslieville-market"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1l1.5 3.1L12 4.6l-2.5 2.4.6 3.4L7 8.8l-3.1 1.6.6-3.4L2 4.6l3.5-.5L7 1z" fill="currentColor"/></svg><span></span></div>
+    </div>
+
+    <!-- ══ EVENTS ══ -->
+
+    <div class="card" data-category="events" data-id="pride-toronto"
+         data-vibes="groups,lively,free,cultural,dancing" data-good-for="groups,girls,free,late,outdoor" data-emoji="🏳️‍🌈">
+      <div class="visited-overlay"><span>✓ Been here</span><span class="vnp" id="note-pride-toronto"></span></div>
+      <div class="card-image bg-rose">
+        <div class="card-image-inner">🏳️‍🌈</div>
+        <div class="card-tag">June</div><div class="card-vibe">Everyone</div>
+      </div>
+      <div class="card-body">
+        <div class="card-hood">Church-Wellesley Village · Events</div>
+        <div class="card-name">Pride Toronto 2026</div>
+        <div class="card-desc">A full month of June celebration culminating in one of the world's largest Pride Parades through the downtown core. Start in the Village, make it to the parade, end up dancing somewhere wonderful.</div>
+      </div>
+      <div class="card-footer">
+        <div class="card-meta"><div class="card-best-for">→ <strong>Best for:</strong> everyone, big groups</div><div class="card-price">Free</div></div>
+        <button class="been-here-btn" data-id="pride-toronto"><svg width="12" height="12" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="6" stroke="currentColor" stroke-width="1.4"/><path d="M4 6.5l1.8 1.8 3.2-3.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Been here</button>
+      </div>
+      <div class="rec-badge" id="rec-pride-toronto"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1l1.5 3.1L12 4.6l-2.5 2.4.6 3.4L7 8.8l-3.1 1.6.6-3.4L2 4.6l3.5-.5L7 1z" fill="currentColor"/></svg><span></span></div>
+    </div>
+
+    <div class="card" data-category="events" data-id="fifa-2026"
+         data-vibes="groups,lively,cultural" data-good-for="groups,outdoor" data-emoji="⚽">
+      <div class="visited-overlay"><span>✓ Been here</span><span class="vnp" id="note-fifa-2026"></span></div>
+      <div class="card-image bg-gold">
+        <div class="card-image-inner">⚽</div>
+        <div class="card-tag">Summer 2026</div><div class="card-vibe">Groups</div>
+      </div>
+      <div class="card-body">
+        <div class="card-hood">Citywide · Events</div>
+        <div class="card-name">FIFA World Cup 2026</div>
+        <div class="card-desc">Toronto is a host city — the city will be electric. Fan zones, watch parties, and cultural celebrations across every neighbourhood. Even without match tickets the street energy is a once-in-a-generation experience.</div>
+      </div>
+      <div class="card-footer">
+        <div class="card-meta"><div class="card-best-for">→ <strong>Best for:</strong> sports fans, groups</div><div class="card-price">Free – $$$$</div></div>
+        <button class="been-here-btn" data-id="fifa-2026"><svg width="12" height="12" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="6" stroke="currentColor" stroke-width="1.4"/><path d="M4 6.5l1.8 1.8 3.2-3.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Been here</button>
+      </div>
+      <div class="rec-badge" id="rec-fifa-2026"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1l1.5 3.1L12 4.6l-2.5 2.4.6 3.4L7 8.8l-3.1 1.6.6-3.4L2 4.6l3.5-.5L7 1z" fill="currentColor"/></svg><span></span></div>
+    </div>
+
+    <div class="card" data-category="events" data-id="caribana"
+         data-vibes="groups,lively,cultural,dancing,outdoor" data-good-for="groups,girls,outdoor,late" data-emoji="🎪">
+      <div class="visited-overlay"><span>✓ Been here</span><span class="vnp" id="note-caribana"></span></div>
+      <div class="card-image bg-mint">
+        <div class="card-image-inner">🎪</div>
+        <div class="card-tag">July–August</div><div class="card-vibe">Cultural immersion</div>
+      </div>
+      <div class="card-body">
+        <div class="card-hood">Lakeshore Blvd · Events</div>
+        <div class="card-name">Toronto Caribbean Carnival</div>
+        <div class="card-desc">Caribana — one of North America's largest festivals. Feathered costumes, steel pan bands, Caribbean food, and the Grand Parade along Lakeshore Blvd that takes your breath away. A Toronto summer essential.</div>
+      </div>
+      <div class="card-footer">
+        <div class="card-meta"><div class="card-best-for">→ <strong>Best for:</strong> groups, cultural experience</div><div class="card-price">$ – $$</div></div>
+        <button class="been-here-btn" data-id="caribana"><svg width="12" height="12" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="6" stroke="currentColor" stroke-width="1.4"/><path d="M4 6.5l1.8 1.8 3.2-3.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Been here</button>
+      </div>
+      <div class="rec-badge" id="rec-caribana"><svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1l1.5 3.1L12 4.6l-2.5 2.4.6 3.4L7 8.8l-3.1 1.6.6-3.4L2 4.6l3.5-.5L7 1z" fill="currentColor"/></svg><span></span></div>
+    </div>
+
+  </div><!-- /cards-grid -->
+</main>
+
+<div class="divider"><hr /></div>
+
+<!-- TIPS -->
+<section class="tips-section">
+  <h2>Insider Tips</h2>
+  <div class="tips-grid">
+    <div class="tip-card"><div class="tip-label">🕐 Timing</div><p>Book Bar Eugenie, Bar Isabel, and No Vacancy at least 2 weeks out. Walk-in at the bar is easier than a table. For St. Lawrence Market, arrive before 10am Saturday for the best selection.</p></div>
+    <div class="tip-card"><div class="tip-label">🚇 Getting Around</div><p>TTC streetcar on Queen West for bars and cafés. Ferry from Jack Layton Terminal for the Islands — book online on summer weekends. Scarborough Bluffs is easiest by car or rideshare.</p></div>
+    <div class="tip-card"><div class="tip-label">🌤️ Best Season</div><p>May–June is peak Toronto — warm enough to be outside, not yet too crowded, and the terraces are just opening up. Late April for High Park cherry blossoms.</p></div>
+    <div class="tip-card"><div class="tip-label">💸 Free Days</div><p>AGO is pay-what-you-can on Wednesday evenings. Power Plant is free Fridays. High Park, ravines, Trinity Bellwoods, Harbourfront boardwalk — all completely free.</p></div>
+  </div>
+</section>
+
+<footer>
+  <p>Made with love for our Toronto adventures 🍁 · <strong>Spring 2026</strong></p>
+  <p style="margin-top:8px;font-size:.75rem;">Picks verified via current sources · Always double-check hours before heading out</p>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal" role="dialog" aria-modal="true">
+    <button class="modal-close" id="modal-close">✕</button>
+    <span class="modal-emoji" id="modal-emoji"></span>
+    <div class="modal-title" id="modal-place-name"></div>
+    <div class="modal-sub">What did you love about it? Pick everything that resonates.</div>
+    <div class="modal-slabel">The vibe was…</div>
+    <div class="tag-grid" id="tag-grid">
+      <button class="tag-chip" data-vibe="romantic">💕 Romantic</button>
+      <button class="tag-chip" data-vibe="cozy">🕯️ So cozy</button>
+      <button class="tag-chip" data-vibe="lively">⚡ Full of energy</button>
+      <button class="tag-chip" data-vibe="groups">👯 Great for groups</button>
+      <button class="tag-chip" data-vibe="intimate">🤫 Intimate &amp; quiet</button>
+      <button class="tag-chip" data-vibe="food">🍽️ Amazing food</button>
+      <button class="tag-chip" data-vibe="cocktails">🍸 Stellar drinks</button>
+      <button class="tag-chip" data-vibe="natural-wine">🍷 Natural wine heaven</button>
+      <button class="tag-chip" data-vibe="outdoor">🌿 Loved being outside</button>
+      <button class="tag-chip" data-vibe="cultural">🎨 Really cultural</button>
+      <button class="tag-chip" data-vibe="hidden-gem">💎 Total hidden gem</button>
+      <button class="tag-chip" data-vibe="cheap">💸 Great value</button>
+      <button class="tag-chip" data-vibe="brunch">☕ Perfect lazy morning</button>
+      <button class="tag-chip" data-vibe="dancing">🎶 We danced</button>
+    </div>
+    <div class="modal-slabel">Anything else to remember?</div>
+    <textarea class="modal-note" id="modal-note" placeholder="e.g. get the khao soi, go before 10am, the back patio is amazing…" rows="3"></textarea>
+    <div class="modal-footer">
+      <button class="btn-secondary" id="modal-cancel">Maybe later</button>
+      <button class="btn-primary" id="modal-save">Save to my picks ✓</button>
+    </div>
+    <div id="modal-unmark">Remove from visited</div>
+  </div>
+</div>
+
+<script>
+  const STORAGE_KEY = 'our-toronto-v2';
+  let visited = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+  let activeId = null;
+
+  const vibeLabels = {
+    romantic:'romance', cozy:'cozy spots', lively:'lively energy', groups:'group hangs',
+    intimate:'intimate vibes', food:'great food', cocktails:'cocktails',
+    'natural-wine':'natural wine', outdoor:'the outdoors', cultural:'arts & culture',
+    'hidden-gem':'hidden gems', cheap:'great value', brunch:'lazy mornings', dancing:'dancing'
+  };
+
+  // DOM
+  const overlay     = document.getElementById('modal-overlay');
+  const modalName   = document.getElementById('modal-place-name');
+  const modalEmoji  = document.getElementById('modal-emoji');
+  const modalNote   = document.getElementById('modal-note');
+  const tagGrid     = document.getElementById('tag-grid');
+  const picksBar    = document.getElementById('picks-bar');
+  const picksSumEl  = document.getElementById('picks-summary');
+  const tasteEl     = document.getElementById('taste-insight');
+  const modalUnmark = document.getElementById('modal-unmark');
+  const filterClear = document.getElementById('filter-clear');
+  const countEl     = document.getElementById('results-count');
+  const emptyState  = document.getElementById('empty-state');
+  const allCards    = document.querySelectorAll('.card[data-id]');
+
+  // Filter state
+  const activeCats = new Set();
+  const activeFor  = new Set();
+  let   special    = null; // 'visited' | 'recs' | null
+
+  // Category buttons
+  document.querySelectorAll('.cat-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const cat = btn.dataset.cat;
+      activeCats.has(cat) ? activeCats.delete(cat) : activeCats.add(cat);
+      btn.classList.toggle('on-cat', activeCats.has(cat));
+      special = null;
+      document.getElementById('btn-visited').classList.remove('on-visited');
+      document.getElementById('btn-recs').classList.remove('on-recs');
+      applyFilters();
+    });
+  });
+
+  // Good-for buttons
+  document.querySelectorAll('.for-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const f = btn.dataset.for;
+      activeFor.has(f) ? activeFor.delete(f) : activeFor.add(f);
+      btn.classList.toggle('on-for', activeFor.has(f));
+      special = null;
+      document.getElementById('btn-visited').classList.remove('on-visited');
+      document.getElementById('btn-recs').classList.remove('on-recs');
+      applyFilters();
+    });
+  });
+
+  // Special filters
+  document.getElementById('btn-visited').addEventListener('click', function() {
+    special = special === 'visited' ? null : 'visited';
+    this.classList.toggle('on-visited', special === 'visited');
+    document.getElementById('btn-recs').classList.remove('on-recs');
+    if (special) { activeCats.clear(); activeFor.clear(); resetBtns(); }
+    applyFilters();
+  });
+
+  document.getElementById('btn-recs').addEventListener('click', function() {
+    special = special === 'recs' ? null : 'recs';
+    this.classList.toggle('on-recs', special === 'recs');
+    document.getElementById('btn-visited').classList.remove('on-visited');
+    if (special) { activeCats.clear(); activeFor.clear(); resetBtns(); }
+    applyFilters();
+  });
+
+  filterClear.addEventListener('click', () => {
+    activeCats.clear(); activeFor.clear(); special = null;
+    resetBtns();
+    document.getElementById('btn-visited').classList.remove('on-visited');
+    document.getElementById('btn-recs').classList.remove('on-recs');
+    applyFilters();
+  });
+
+  function resetBtns() {
+    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('on-cat'));
+    document.querySelectorAll('.for-btn').forEach(b => b.classList.remove('on-for'));
+  }
+
+  function getLikedVibes() {
+    const s = new Set();
+    Object.values(visited).forEach(v => v.tags.forEach(t => s.add(t)));
+    return s;
+  }
+
+  function applyFilters() {
+    const anyActive = activeCats.size || activeFor.size || special;
+    filterClear.classList.toggle('show', !!anyActive);
+    const likedVibes = getLikedVibes();
+    let visible = 0;
+
+    allCards.forEach(card => {
+      const id      = card.dataset.id;
+      const cat     = card.dataset.category;
+      const goodFor = (card.dataset.goodFor || '').split(',').map(s => s.trim());
+      const isVisited = !!visited[id];
+      const cardVibes = (card.dataset.vibes || '').split(',').map(s => s.trim());
+      const matchVibeCount = cardVibes.filter(v => likedVibes.has(v)).length;
+      const isRec = !isVisited && matchVibeCount >= 2;
+
+      let show = true;
+
+      if (special === 'visited') {
+        show = isVisited;
+      } else if (special === 'recs') {
+        show = isRec;
+      } else {
+        // cat and for filters work as intersection when both active
+        const catOk = activeCats.size === 0 || activeCats.has(cat);
+        const forOk = activeFor.size === 0 || [...activeFor].some(f => goodFor.includes(f));
+        show = catOk && forOk;
+      }
+
+      if (show) { card.removeAttribute('data-hidden'); visible++; }
+      else card.setAttribute('data-hidden', 'true');
+    });
+
+    const total = allCards.length;
+    countEl.innerHTML = anyActive
+      ? `Showing <strong>${visible}</strong> of ${total} places`
+      : `<strong>${total}</strong> places`;
+    emptyState.classList.toggle('show', visible === 0);
+  }
+
+  // Modal
+  function openModal(card) {
+    activeId = card.dataset.id;
+    modalName.textContent  = card.querySelector('.card-name').textContent;
+    modalEmoji.textContent = card.dataset.emoji || '📍';
+    modalNote.value = '';
+    tagGrid.querySelectorAll('.tag-chip').forEach(c => c.classList.remove('selected'));
+    const entry = visited[activeId];
+    if (entry) {
+      entry.tags.forEach(t => { const c = tagGrid.querySelector(`[data-vibe="${t}"]`); if(c) c.classList.add('selected'); });
+      modalNote.value = entry.note || '';
+      modalUnmark.style.display = 'block';
+    } else { modalUnmark.style.display = 'none'; }
+    overlay.classList.add('open');
+    setTimeout(() => modalNote.focus(), 300);
+  }
+  function closeModal() { overlay.classList.remove('open'); activeId = null; }
+
+  function saveVisit() {
+    if (!activeId) return;
+    const card  = document.querySelector(`[data-id="${activeId}"]`);
+    const tags  = [...tagGrid.querySelectorAll('.tag-chip.selected')].map(c => c.dataset.vibe);
+    const note  = modalNote.value.trim();
+    visited[activeId] = { tags, note, name: card.querySelector('.card-name').textContent, emoji: card.dataset.emoji || '📍' };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(visited));
+    applyVisitedState(card, true);
+    updatePicksBar(); updateRecommendations(); applyFilters(); closeModal();
+  }
+
+  function unmarkVisit() {
+    if (!activeId) return;
+    delete visited[activeId];
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(visited));
+    const card = document.querySelector(`[data-id="${activeId}"]`);
+    applyVisitedState(card, false);
+    updatePicksBar(); updateRecommendations(); applyFilters(); closeModal();
+  }
+
+  function applyVisitedState(card, isV) {
+    const btn  = card.querySelector('.been-here-btn');
+    const vnp  = card.querySelector('.vnp');
+    const chk  = `<svg width="12" height="12" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="6" stroke="currentColor" stroke-width="1.4"/><path d="M4 6.5l1.8 1.8 3.2-3.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+    if (isV) {
+      card.classList.add('visited'); card.setAttribute('data-visited','true');
+      btn.innerHTML = chk + 'Visited ✓';
+      if (vnp && visited[card.dataset.id]?.note) vnp.textContent = visited[card.dataset.id].note;
+    } else {
+      card.classList.remove('visited'); card.removeAttribute('data-visited');
+      btn.innerHTML = chk + 'Been here';
+      if (vnp) vnp.textContent = '';
+    }
+  }
+
+  function updatePicksBar() {
+    const entries = Object.entries(visited);
+    if (!entries.length) { picksBar.classList.remove('visible'); return; }
+    picksBar.classList.add('visible');
+    picksSumEl.innerHTML = entries.map(([,v]) =>
+      `<div class="pick-chip"><span class="check">✓</span>${v.emoji} ${v.name}</div>`
+    ).join('');
+    const tc = {};
+    entries.forEach(([,v]) => v.tags.forEach(t => { tc[t]=(tc[t]||0)+1; }));
+    const top = Object.entries(tc).sort((a,b)=>b[1]-a[1])[0];
+    tasteEl.textContent = top && vibeLabels[top[0]] ? `You're all about ${vibeLabels[top[0]]} ✨` : '';
+  }
+
+  function updateRecommendations() {
+    const lv = getLikedVibes();
+    allCards.forEach(card => {
+      const id = card.dataset.id;
+      const badge = document.getElementById(`rec-${id}`);
+      if (!badge) return;
+      if (visited[id] || !lv.size) { badge.classList.remove('show'); return; }
+      const cv = (card.dataset.vibes||'').split(',').map(s=>s.trim());
+      const m = cv.filter(v => lv.has(v));
+      if (m.length >= 2) {
+        badge.querySelector('span').textContent = `You'll love this — great ${vibeLabels[m[0]]||m[0]}`;
+        badge.classList.add('show');
+      } else { badge.classList.remove('show'); }
+    });
+  }
+
+  // Wire up
+  document.querySelectorAll('.been-here-btn').forEach(btn => {
+    btn.addEventListener('click', e => { e.stopPropagation(); openModal(btn.closest('.card')); });
+  });
+  tagGrid.querySelectorAll('.tag-chip').forEach(c => c.addEventListener('click', () => c.classList.toggle('selected')));
+  document.getElementById('modal-save').addEventListener('click', saveVisit);
+  document.getElementById('modal-cancel').addEventListener('click', closeModal);
+  document.getElementById('modal-close').addEventListener('click', closeModal);
+  modalUnmark.addEventListener('click', unmarkVisit);
+  overlay.addEventListener('click', e => { if(e.target===overlay) closeModal(); });
+  document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
+
+  // Init
+  Object.keys(visited).forEach(id => {
+    const card = document.querySelector(`[data-id="${id}"]`);
+    if (card) applyVisitedState(card, true);
+  });
+  updatePicksBar(); updateRecommendations(); applyFilters();
+</script>
+</body>
+</html>
